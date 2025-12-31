@@ -1,0 +1,838 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Aura Sales Solutions – Einordnung statt Tarifchaos</title>
+  <meta name="description" content="Wir helfen dir, deinen Strom- oder Gastarif klar einzuordnen – verständlich, transparent und ohne Druck. Kontakt via WhatsApp." />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg:#FFFFFF;
+      --text:#0B0C10;
+      --muted:#5D6470;
+      --border:#E7E9EF;
+      --gold:#C9A14A;
+      --goldSoft:#E6D3A4;
+
+      --radius:20px;
+      --shadow: 0 16px 40px rgba(11,12,16,.06);
+      --shadow2: 0 10px 24px rgba(11,12,16,.06);
+      --container: 1120px;
+      --gutter: clamp(14px, 4vw, 22px);
+
+      --headerH: 98px;
+    }
+
+    *{ box-sizing:border-box; }
+    html{ scroll-behavior:smooth; }
+    html, body{ min-height:100%; background:#fff; }
+
+    body{
+      margin:0;
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background: transparent;
+      color:var(--text);
+      line-height:1.6;
+      overflow-x:hidden;
+    }
+
+    a{ color:inherit; text-decoration:none; }
+    img{ max-width:100%; height:auto; display:block; }
+
+    .container{
+      width: min(var(--container), calc(100% - (var(--gutter) * 2)));
+      margin:0 auto;
+    }
+
+    /* ===== Background ===== */
+    .bg-image{
+      position: fixed;
+      inset: 0;
+      background: url("./aura-bg.png") center center / cover no-repeat;
+      opacity: 0.12;
+      pointer-events: none;
+      z-index: 0;
+      filter: saturate(1.15) contrast(1.05);
+    }
+
+    .bg-aura{
+      position: fixed;
+      inset: -20%;
+      pointer-events:none;
+      background:
+        radial-gradient(700px 500px at 15% 10%, rgba(201,161,74,.30), transparent 60%),
+        radial-gradient(700px 500px at 85% 25%, rgba(230,180,120,.28), transparent 55%),
+        radial-gradient(900px 650px at 50% 90%, rgba(201,120,74,.26), transparent 55%);
+      filter: blur(0.5px);
+      z-index: 1;
+    }
+
+    header, main, footer{ position: relative; z-index:2; }
+
+    /* Typography */
+    h1,h2,h3{
+      font-family: Fraunces, Georgia, "Times New Roman", serif;
+      letter-spacing:-0.02em;
+      margin:0;
+    }
+    h1{ font-size: clamp(32px, 4vw, 52px); line-height:1.05; }
+    h2{ font-size: clamp(26px, 2.6vw, 36px); line-height:1.15; }
+    h3{ font-size: 20px; line-height:1.25; }
+
+    .muted{ color:var(--muted); }
+    .divider{ height:1px; background:var(--border); border:0; margin:0; }
+
+    /* ===== HEADER (fixed) ===== */
+    header{
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      background: rgba(255,255,255,.88);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(231,233,239,.75);
+    }
+
+    main{ padding-top: var(--headerH); }
+
+    .header-inner{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding: 14px 0;
+      gap: 12px;
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:14px;
+      min-width: 220px;
+      max-width: 100%;
+    }
+
+    .logo-img{
+      width:72px;
+      height:72px;
+      border-radius:999px;
+      object-fit:contain;
+      box-shadow: 0 10px 24px rgba(11,12,16,.06);
+      border: 1px solid rgba(201,161,74,.35);
+      background: rgba(255,255,255,.92);
+      backdrop-filter: blur(10px);
+      flex: 0 0 auto;
+    }
+
+    .brand-name{
+      display:flex;
+      flex-direction:column;
+      line-height:1.1;
+      min-width: 0;
+    }
+    .brand-name strong{ font-weight:600; }
+    .brand-name span{
+      font-size: 14px;
+      color: rgba(201,161,74,.9);
+      font-weight: 500;
+      line-height: 1.35;
+      margin-top: 6px;
+      display: block;
+      max-width: 320px;
+    }
+
+    .hamburger{
+      width:44px;height:44px;
+      border-radius:999px;
+      border:1px solid var(--border);
+      background: rgba(255,255,255,.92);
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      cursor:pointer;
+      box-shadow: 0 8px 16px rgba(11,12,16,.04);
+      backdrop-filter: blur(10px);
+    }
+    .hamburger:hover{ border-color: rgba(201,161,74,.35); }
+    .hamburger svg{ opacity:.75; }
+
+    /* Overlay Menu */
+    .overlay{
+      position:fixed;
+      inset:0;
+      background: rgba(11,12,16,.42);
+      backdrop-filter: blur(6px);
+      display:none;
+      z-index:1200;
+    }
+    .overlay[aria-hidden="false"]{ display:block; }
+
+    .overlay-panel{
+      position:absolute;
+      right: var(--gutter);
+      top: calc(var(--headerH) - 2px);
+      width: min(420px, calc(100% - (var(--gutter) * 2)));
+      border-radius: 22px;
+      background: rgba(255,255,255,.96);
+      border:1px solid var(--border);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+      backdrop-filter: blur(12px);
+    }
+    .overlay-head{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      padding: 14px 16px;
+      border-bottom:1px solid var(--border);
+    }
+    .overlay-close{
+      width:40px;height:40px;border-radius:999px;border:1px solid var(--border);
+      background: rgba(255,255,255,.96); cursor:pointer;
+      display:inline-flex; align-items:center; justify-content:center;
+    }
+    .overlay-links{
+      display:flex;
+      flex-direction:column;
+      padding: 10px;
+    }
+    .overlay-links a{
+      padding: 14px 14px;
+      border-radius: 16px;
+      color:var(--text);
+      font-weight:600;
+      border:1px solid transparent;
+    }
+    .overlay-links a:hover{
+      background: rgba(201,161,74,.06);
+      border-color: rgba(201,161,74,.25);
+    }
+
+    /* Sections */
+    section{ padding: 72px 0; }
+    .section-head{
+      display:flex;
+      align-items:flex-end;
+      justify-content:space-between;
+      gap:24px;
+      margin-bottom: 26px;
+    }
+
+    /* Hero */
+    .hero{ padding: 56px 0 32px; }
+    .hero-grid{
+      display:grid;
+      grid-template-columns: 1.25fr .75fr;
+      gap: 28px;
+      align-items:stretch;
+    }
+    .hero-card{
+      border:1px solid var(--border);
+      border-radius: var(--radius);
+      background: rgba(255,255,255,0.94);
+      box-shadow: var(--shadow);
+      padding: 28px;
+      backdrop-filter: blur(12px);
+      overflow:hidden;
+    }
+    .hero p{ margin: 14px 0 0; color:var(--muted); font-size:16px; }
+    .hero .micro{
+      margin-top: 14px;
+      padding-top: 14px;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+    }
+    .hero-cta{
+      display:flex;
+      flex-wrap:wrap;
+      gap: 12px;
+      margin-top: 18px;
+    }
+    .trust{ margin-top: 10px; color:var(--muted); font-size:13px; }
+
+    .seal{ display:flex; flex-direction:column; gap: 14px; justify-content:space-between; }
+
+    /* Cards grid */
+    .grid{ display:grid; gap:16px; }
+    .grid-2{ grid-template-columns: repeat(2, minmax(0,1fr)); }
+    .grid-3{ grid-template-columns: repeat(3, minmax(0,1fr)); }
+
+    .card{
+      border:1px solid var(--border);
+      border-radius: var(--radius);
+      background: rgba(255,255,255,0.94);
+      box-shadow: var(--shadow2);
+      padding: 18px;
+      backdrop-filter: blur(12px);
+      overflow:hidden;
+    }
+
+    .list{
+      margin: 10px 0 0;
+      padding: 0;
+      list-style:none;
+      display:flex;
+      flex-direction:column;
+      gap: 10px;
+    }
+    .li{
+      display:flex;
+      gap:10px;
+      align-items:flex-start;
+      color:var(--muted);
+      min-width: 0;
+    }
+    .li .bullet{
+      width:10px;height:10px;border-radius:999px;margin-top:7px;
+      border:1px solid rgba(201,161,74,.55);
+      background: rgba(201,161,74,.10);
+      flex:0 0 auto;
+    }
+
+    /* Ablauf */
+    .steps{
+      display:grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 18px;
+      align-items:start;
+      margin-top: 14px;
+    }
+    .step{
+      text-align:left;
+      padding: 22px 18px;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.94);
+      box-shadow: var(--shadow2);
+      backdrop-filter: blur(12px);
+
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity .6s ease, transform .6s ease;
+      overflow:hidden;
+    }
+    .step.is-inview{ opacity: 1; transform: translateY(0); }
+
+    .step-top{ display:flex; align-items:center; gap: 12px; margin-bottom: 10px; }
+    .step-num{
+      width: 38px;
+      height: 38px;
+      border-radius: 999px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-weight:700;
+      color:#fff;
+      background: linear-gradient(180deg, rgba(11,12,16,.95), rgba(11,12,16,.80));
+      box-shadow: 0 10px 22px rgba(11,12,16,.10);
+      flex:0 0 auto;
+    }
+    .step-title{ font-weight:700; color: var(--text); margin: 0; line-height:1.25; }
+    .step-sub{ margin:0; color: var(--muted); font-size: 14px; line-height: 1.55; }
+
+    /* Contact */
+    .contact-wrap{ display:flex; justify-content:center; }
+    .contact-box{
+      border:1px solid var(--border);
+      border-radius: var(--radius);
+      background: rgba(255,255,255,0.94);
+      box-shadow: var(--shadow);
+      padding: 22px;
+      max-width: 560px;
+      width: 100%;
+      backdrop-filter: blur(12px);
+      overflow:hidden;
+    }
+
+    /* Footer */
+    footer{
+      padding: 34px 0 48px;
+      border-top:1px solid rgba(231,233,239,.9);
+      background: rgba(255,255,255,.70);
+      backdrop-filter: blur(12px);
+    }
+    .footer-grid{
+      display:grid;
+      grid-template-columns: 1.4fr .8fr .8fr;
+      gap: 18px;
+      color:var(--muted);
+      font-size:14px;
+    }
+    .footer-grid strong{ color:var(--text); }
+    .footer-links{
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+    }
+    .footer-links a{ color:var(--muted); }
+    .footer-links a:hover{ color:var(--text); }
+
+    /* Floating WhatsApp (mobile) */
+    .wa-float{
+      position:fixed;
+      right: 18px;
+      bottom: 18px;
+      z-index:1100;
+      display:none;
+    }
+    .wa-float a{
+      width:56px;
+      height:56px;
+      border-radius:999px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      border: 1px solid rgba(201,161,74,.40);
+      background: linear-gradient(180deg, rgba(230,211,164,.24), rgba(201,161,74,.10));
+      box-shadow: var(--shadow2);
+      backdrop-filter: blur(12px);
+    }
+    .wa-float img{
+      width:60px;
+      height:60px;
+      opacity:.65;
+      object-fit:contain;
+    }
+
+    /* ===== CTA Textlink mit Pfeil (Aura Style) ===== */
+    .cta-textlink{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      font-weight:600;
+      color:var(--text);
+      text-decoration:none;
+      padding-bottom:4px;
+      border-bottom:1px solid rgba(201,161,74,.45);
+      transition: gap .2s ease, border-color .2s ease, opacity .2s ease;
+    }
+    .cta-textlink:hover{
+      gap:14px;
+      border-color: rgba(201,161,74,.75);
+      opacity:.95;
+    }
+    .cta-arrow{
+      width:46px;   /* Icon-Größe */
+      height:auto;
+      opacity:.65;
+      transform: translateY(1px);
+    }
+
+    /* Responsive */
+    @media (max-width: 920px){
+      :root{ --headerH: 92px; }
+
+      section{ padding: 56px 0; }
+      .hero{ padding: 40px 0 24px; }
+
+      .hero-grid{ grid-template-columns: 1fr; }
+      .grid-3{ grid-template-columns: 1fr; }
+      .grid-2{ grid-template-columns: 1fr; }
+
+      .wa-float{ display:block; }
+      .steps{ grid-template-columns: 1fr; }
+
+      .logo-img{ width:64px; height:64px; }
+      .hero-card{ padding: 20px; }
+    }
+
+    @media (max-width: 420px){
+      .brand-name span{
+        font-size: 12px;
+        line-height: 1.3;
+        max-width: 220px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce){
+      html{ scroll-behavior:auto; }
+      .cta-textlink{ transition:none; }
+      .step{ transition:none; opacity:1; transform:none; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="bg-image" aria-hidden="true"></div>
+  <div class="bg-aura" aria-hidden="true"></div>
+
+  <!-- CONFIG -->
+  <script>
+    const WHATSAPP_NUMBER = "4915141346004"; // ohne +, ohne Leerzeichen
+    const WA_TEXT = encodeURIComponent(
+      "Hi, ich bin unsicher, ob mein aktueller Tarif noch sinnvoll ist – könnt ihr mir kurz helfen?"
+    );
+    function waLink() {
+      return `https://wa.me/${WHATSAPP_NUMBER}?text=${WA_TEXT}`;
+    }
+  </script>
+
+  <header>
+    <div class="container">
+      <div class="header-inner">
+        <a class="brand" href="#top" aria-label="Aura Sales Solutions">
+          <img class="logo-img" src="logo-aura-sales-solutions.png" alt="Aura Sales Solutions Logo">
+          <div class="brand-name">
+            <strong>Aura Sales Solutions</strong>
+            <span>
+              Energie, die wirkt.<br>
+              Lösungen, die strahlen.
+            </span>
+          </div>
+        </a>
+
+        <button class="hamburger" id="menuBtn" aria-label="Menü öffnen" aria-expanded="false" aria-controls="overlayMenu">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#5D6470" stroke-width="2" stroke-linecap="round">
+            <path d="M4 7h16M4 12h16M4 17h16"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Overlay Menu -->
+  <div class="overlay" id="overlay" aria-hidden="true">
+    <div class="overlay-panel" id="overlayMenu" role="dialog" aria-modal="true" aria-label="Navigation">
+      <div class="overlay-head">
+        <strong>Navigation</strong>
+        <button class="overlay-close" id="closeBtn" aria-label="Menü schließen">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#5D6470" stroke-width="2" stroke-linecap="round">
+            <path d="M6 6l12 12M18 6l-12 12"/>
+          </svg>
+        </button>
+      </div>
+      <nav class="overlay-links">
+        <a href="#einordnung" class="navlink">Tarif einordnen</a>
+        <a href="#loesung" class="navlink">So helfen wir</a>
+        <a href="#ablauf" class="navlink">So läuft es ab</a>
+        <a href="#ueber" class="navlink">Über uns</a>
+        <a href="#kontakt" class="navlink">Kontakt</a>
+      </nav>
+    </div>
+  </div>
+
+  <main id="top">
+    <!-- HERO -->
+    <section class="hero">
+      <div class="container">
+        <div class="hero-grid">
+          <div class="hero-card">
+            <h1>Passt der Preis noch – oder zahlt man einfach weiter?</h1>
+
+            <p>
+              Es geht selten nur um Strom oder Gas.<br>
+              Viele wissen einfach nicht, ob ihr Tarif noch passt.
+            </p>
+
+            <p class="micro">
+              <strong>Wir schauen uns deinen Tarif an und sagen dir ehrlich, wie er einzuordnen ist.</strong>
+              – verständlich, transparent und ohne Druck.
+            </p>
+
+            <div class="hero-cta">
+              <a class="cta-textlink" id="waHero" href="#" rel="noopener">
+                <img src="ctapfeil.png" alt="" aria-hidden="true" class="cta-arrow">
+                Tarif einordnen lassen
+              </a>
+            </div>
+
+            <div class="trust">Unverbindlich und ohne Verkaufsgespräch. Du entscheidest selbst.</div>
+          </div>
+
+          <div class="seal">
+            <div class="card">
+              <h3>Unser Ansatz</h3>
+              <p class="muted" style="margin:8px 0 0;">
+                Manche Entscheidungen brauchen keinen Wechsel – sondern die Sicherheit, <strong>richtig zu liegen</strong>.<br>
+                Wenn dein Tarif passt, <strong>bleibt er</strong>. Wenn nicht, zeigen wir dir <strong>eine Alternative</strong>.
+              </p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <hr class="divider" />
+
+    <!-- EINORDNUNG -->
+    <section id="einordnung">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <h2>Einordnung statt Tarifchaos</h2>
+            <p class="muted" style="margin:10px 0 0;">Kommt dir das bekannt vor?</p>
+          </div>
+        </div>
+
+        <div class="grid grid-2">
+          <div class="card">
+            <h3>Was viele aktuell beschäftigt</h3>
+            <ul class="list">
+              <li class="li"><span class="bullet"></span>Preise ändern sich – aber selten wird klar erklärt, was das für dich heißt.</li>
+              <li class="li"><span class="bullet"></span>Tarife wirken kompliziert oder intransparent.</li>
+              <li class="li"><span class="bullet"></span>Viele bleiben lieber, weil sich ein Wechsel unsicher anfühlt.</li>
+            </ul>
+          </div>
+
+          <div class="card">
+            <h3>Was du eigentlich willst</h3>
+            <ul class="list">
+              <li class="li"><span class="bullet"></span>Klarheit statt Tarif-Schlacht.</li>
+              <li class="li"><span class="bullet"></span>Entscheiden können – ohne das Gefühl, etwas zu übersehen.</li>
+              <li class="li"><span class="bullet"></span>Ruhe im Prozess, statt Druck von außen.</li>
+            </ul>
+
+            <div style="margin-top:14px; padding-top:14px; border-top:1px solid var(--border); color:var(--muted);">
+              <strong style="color:var(--text);">Am Ende zählt:</strong> Ein gutes Gefühl bei der Entscheidung.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- LÖSUNG -->
+    <section id="loesung">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <h2>Unsere Lösung: Klarheit, Begleitung, Wirkung</h2>
+            <p class="muted" style="margin:10px 0 0;">Verständlich erklärt – damit du weißt, was du tust.</p>
+          </div>
+        </div>
+
+        <div class="grid grid-3">
+          <div class="card">
+            <h3>Klarheit</h3>
+            <p class="muted" style="margin:8px 0 0;">
+              Verständlich erklärt – ohne Fachsprache.<br>
+              Wir ordnen deinen Tarif ein: Was passt – und was nicht?
+            </p>
+          </div>
+
+          <div class="card">
+            <h3>Begleitung</h3>
+            <p class="muted" style="margin:8px 0 0;">
+              Ein fester Ansprechpartner.<br>
+              Auch nach dem Abschluss bleiben wir erreichbar.
+            </p>
+          </div>
+
+          <div class="card">
+            <h3>Wirkung</h3>
+            <p class="muted" style="margin:8px 0 0;">
+              Lösungen, die zu deiner Situation passen.<br>
+              Preisgarantie dort, wo sie wirklich Sinn macht.
+            </p>
+          </div>
+        </div>
+
+        <div class="card" style="margin-top:16px; border-color: rgba(201,161,74,.30); background: linear-gradient(180deg, rgba(230,211,164,.14), rgba(255,255,255,1));">
+          <strong>Wir sagen dir offen,</strong>
+          <span class="muted">ob dein Tarif gut ist – oder ob es echtes Potenzial gibt.</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ABLAUF -->
+    <section id="ablauf">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <h2>So läuft es ab</h2>
+            <p class="muted" style="margin:10px 0 0;">Keine Verpflichtung. Keine Hektik. Kein Druck.</p>
+          </div>
+        </div>
+
+        <div class="steps">
+          <div class="step reveal" style="transition-delay:0ms;">
+            <div class="step-top">
+              <div class="step-num">1</div>
+              <div class="step-title">WhatsApp-Nachricht senden</div>
+            </div>
+            <p class="step-sub">Kurz „Hi“ reicht – du wirst ruhig durchgeführt.</p>
+          </div>
+
+          <div class="step reveal" style="transition-delay:80ms;">
+            <div class="step-top">
+              <div class="step-num">2</div>
+              <div class="step-title">Tarifdaten kurz teilen</div>
+            </div>
+            <p class="step-sub">Verbrauch, Arbeitspreis, Abschlag, PLZ – oder Foto der letzten Rechnung.</p>
+          </div>
+
+          <div class="step reveal" style="transition-delay:160ms;">
+            <div class="step-top">
+              <div class="step-num">3</div>
+              <div class="step-title">Ehrliche Einordnung + Empfehlung</div>
+            </div>
+            <p class="step-sub">Verständlich, transparent – ohne Druck.</p>
+          </div>
+
+          <div class="step reveal" style="transition-delay:240ms;">
+            <div class="step-top">
+              <div class="step-num">4</div>
+              <div class="step-title">Du entscheidest – in Ruhe</div>
+            </div>
+            <p class="step-sub">Auch „Bleiben“ kann die beste Option sein.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ÜBER UNS -->
+    <section id="ueber">
+      <div class="container">
+        <div class="section-head">
+          <div><h2>Wer wir sind</h2></div>
+        </div>
+
+        <div class="grid grid-2">
+          <div class="card">
+            <p class="muted" style="margin:0;">
+              <strong style="color:var(--text);">Aura Sales Solutions</strong> begleitet Menschen bei der Vermittlung von Strom- und Gastarifen – ruhig, transparent und verlässlich.
+            </p>
+            <p class="muted" style="margin:14px 0 0;">
+              Aura steht für Ausstrahlung: klare Orientierung, ohne Lautstärke.<br>
+              Unser Anspruch: Du triffst eine Entscheidung, die sich für dich richtig anfühlt – weil du sie verstehst.
+            </p>
+          </div>
+
+          <div class="card" style="border-color: rgba(201,161,74,.30);">
+            <h3>Unser Grundsatz</h3>
+            <p class="muted" style="margin:8px 0 0;">
+              Unser Job ist nicht „mehr Verträge“.<br>
+              <strong style="color:var(--text);">Unser Job ist die richtige Entscheidung.</strong>
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- KONTAKT -->
+    <section id="kontakt">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <h2>Kontakt</h2>
+            <p class="muted" style="margin:10px 0 0;">
+              Wir schauen gemeinsam auf deinen Tarif und sagen dir <strong>ehrlich, wie er einzuordnen ist.</strong>
+            </p>
+          </div>
+        </div>
+
+        <div class="contact-wrap">
+          <div class="contact-box">
+            <h3>Direkt per WhatsApp</h3>
+            <p class="muted" style="margin:8px 0 0;">
+              Ein kurzes Gespräch. Ohne Druck. Ohne Verpflichtung.
+            </p>
+
+            <div class="hero-cta" style="margin-top:16px;">
+              <a class="cta-textlink" id="waContact" href="#" rel="noopener">
+                <img src="ctapfeil.png" alt="" aria-hidden="true" class="cta-arrow">
+                Zum Tarifcheck!
+              </a>
+            </div>
+
+            <div class="trust">Kein Verkaufsgespräch. Du entscheidest in Ruhe.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <div class="container">
+        <div class="footer-grid">
+          <div>
+            <strong>Aura Sales Solutions</strong>
+            <div class="muted" style="margin-top:8px;">
+              Strom- &amp; Gasvermittlung<br><br>
+              Persönliche Begleitung statt Tarifchaos
+            </div>
+          </div>
+
+          <div class="footer-links">
+            <strong>Einordnung</strong>
+            <a href="#ablauf">Ablauf</a>
+            <a href="#ueber">Über uns</a>
+            <a href="#kontakt">Kontakt</a>
+            <a href="datenschutz.html">Datenschutz</a>
+            <a href="impressum.html">Impressum</a>
+          </div>
+
+          <div class="footer-links">
+            <strong>Gespräch starten</strong>
+            <a id="waFooter" href="#" rel="noopener">WhatsApp-Kontakt</a>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </main>
+
+  <!-- Floating CTA (mobile) -->
+  <div class="wa-float" aria-label="Schnellkontakt">
+    <a id="waFloat" href="#" rel="noopener" aria-label="WhatsApp öffnen">
+      <img src="whatsapp.png" alt="" aria-hidden="true">
+    </a>
+  </div>
+
+  <script>
+    // WhatsApp links setzen
+    const wa = waLink();
+    ["waHero","waContact","waFooter","waFloat"].forEach(id => {
+      const el = document.getElementById(id);
+      if(el) el.href = wa;
+    });
+
+    // Overlay menu
+    const overlay = document.getElementById("overlay");
+    const menuBtn = document.getElementById("menuBtn");
+    const closeBtn = document.getElementById("closeBtn");
+
+    function openMenu(){
+      overlay.setAttribute("aria-hidden","false");
+      menuBtn.setAttribute("aria-expanded","true");
+      document.body.style.overflow="hidden";
+    }
+    function closeMenu(){
+      overlay.setAttribute("aria-hidden","true");
+      menuBtn.setAttribute("aria-expanded","false");
+      document.body.style.overflow="";
+    }
+
+    menuBtn.addEventListener("click", openMenu);
+    closeBtn.addEventListener("click", closeMenu);
+    overlay.addEventListener("click", (e) => { if(e.target === overlay) closeMenu(); });
+    document.addEventListener("keydown", (e) => {
+      if(e.key === "Escape" && overlay.getAttribute("aria-hidden") === "false") closeMenu();
+    });
+    document.querySelectorAll(".navlink").forEach(a => a.addEventListener("click", closeMenu));
+
+    // Reveal animation
+    const revealEls = document.querySelectorAll(".reveal");
+    const prefersReduced = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    if(!prefersReduced && "IntersectionObserver" in window){
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if(entry.isIntersecting){
+            entry.target.classList.add("is-inview");
+            io.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.18 });
+
+      revealEls.forEach(el => io.observe(el));
+    } else {
+      revealEls.forEach(el => el.classList.add("is-inview"));
+    }
+  </script>
+</body>
+</html>
